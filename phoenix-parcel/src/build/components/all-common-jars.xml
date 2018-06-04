@@ -31,7 +31,6 @@
         <include>phoenix-*-client-minimal.jar</include>
       </includes>
       <excludes>
-<!--         <exclude>*-minimal.jar</exclude> -->
         <exclude>*-sources.jar</exclude>
         <exclude>*-tests.jar</exclude>
       </excludes>

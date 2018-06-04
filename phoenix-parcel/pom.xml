@@ -119,7 +119,6 @@
               <goal>single</goal>
             </goals>
             <configuration>
-<!--               <finalName>${parcel.folder}-${os.shortname}.parcel</finalName> -->
               <attach>false</attach>
               <appendAssemblyId>false</appendAssemblyId>
               <descriptors>
