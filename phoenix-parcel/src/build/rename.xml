@@ -25,16 +25,17 @@
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
 
   <!--This 'all' id is not appended to the produced bundle because we do this: http://maven.apache.org/plugins/maven-assembly-plugin/faq.html#required-classifiers -->
-  <id>all</id>
+  <id>rename</id>
   <formats>
-    <format>tar.gz</format>
+    <format>dir</format>
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
 
-  <componentDescriptors>
-    <componentDescriptor>src/build/components/all-common-files.xml</componentDescriptor>
-    <componentDescriptor>src/build/components/all-common-jars.xml</componentDescriptor>
-    <componentDescriptor>src/build/components/all-common-dependencies.xml</componentDescriptor>
-  </componentDescriptors>
-
+  <files>
+    <file>
+      <source>target/${parcel.file}.tar.gz</source>
+      <outputDirectory>..</outputDirectory>
+      <destName>${parcel.folder}-${os.shortname}.parcel</destName>
+    </file>
+  </files>
 </assembly>
