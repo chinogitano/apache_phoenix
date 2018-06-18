@@ -159,7 +159,6 @@
       </excludes>
       <fileMode>0644</fileMode>
     </fileSet>
-    <!-- Miles addition -->
     <fileSet>
       <directory>${project.basedir}/../phoenix-spark2/target/</directory>
       <outputDirectory>${parcel.folder}/lib/phoenix/lib</outputDirectory>

@@ -27,6 +27,7 @@
   <!--This 'all' id is not appended to the produced bundle because we do this: http://maven.apache.org/plugins/maven-assembly-plugin/faq.html#required-classifiers -->
   <id>all</id>
   <formats>
+    <!-- Compress to conform to CM Ext Validator -->
     <format>tar.gz</format>
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
