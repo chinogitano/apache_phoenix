@@ -38,7 +38,8 @@
     <source.skip>true</source.skip>
     <top.dir>${project.basedir}/..</top.dir>
     <maven.test.skip>true</maven.test.skip>
-    <parcel.patch.count>3</parcel.patch.count>
+    <os.shortname>el6</os.shortname>
+    <parcel.patch.count>4</parcel.patch.count>
     <parcel.release>0.${parcel.patch.count}</parcel.release>
     <parcel.folder>APACHE_PHOENIX-${phoenix.version}-${cdh.version}.p${parcel.release}</parcel.folder>
     <parcel.file>${parcel.folder}.parcel</parcel.file>
@@ -118,6 +119,26 @@
                 <descriptor>src/build/parcel.xml</descriptor>
               </descriptors>
               <tarLongFileMode>posix</tarLongFileMode>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Rename tar file to Cloudera parcel format -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>rename-parcel</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <attach>false</attach>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>src/build/rename.xml</descriptor>
+              </descriptors>
             </configuration>
           </execution>
         </executions>

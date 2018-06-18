@@ -159,6 +159,21 @@
       </excludes>
       <fileMode>0644</fileMode>
     </fileSet>
+    <!-- Miles addition -->
+    <fileSet>
+      <directory>${project.basedir}/../phoenix-spark2/target/</directory>
+      <outputDirectory>${parcel.folder}/lib/phoenix/lib</outputDirectory>
+      <includes>
+          <include>phoenix-*.jar</include>
+      </includes>
+      <excludes>
+        <exclude>*-javadoc.jar</exclude>
+        <exclude>*-minimal.jar</exclude>
+        <exclude>*-sources.jar</exclude>
+        <exclude>*-tests.jar</exclude>
+      </excludes>
+      <fileMode>0644</fileMode>
+    </fileSet>
     <fileSet>
       <directory>${project.basedir}/../phoenix-queryserver/target/</directory>
       <outputDirectory>${parcel.folder}/lib/phoenix/lib</outputDirectory>

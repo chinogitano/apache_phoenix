@@ -31,6 +31,7 @@
     <module>phoenix-queryserver</module>
     <module>phoenix-pherf</module>
     <module>phoenix-spark</module>
+    <module>phoenix-spark2</module>
     <module>phoenix-hive</module>
     <module>phoenix-client</module>
     <module>phoenix-server</module>
