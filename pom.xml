@@ -232,6 +232,7 @@
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
+          <version>0.10</version>
           <!-- Avoid defining exclusions in pluginManagement as they are global.
                We already inherit some from the ASF parent pom. -->
         </plugin>
@@ -364,6 +365,24 @@
                 <goal>verify</goal>
               </goals>
             </execution>
+<execution>
+              <id>SplitSystemCatalogTests</id>
+              <configuration>
+                 <encoding>UTF-8</encoding>
+                 <forkCount>${numForkedIT}</forkCount>
+                 <runOrder>alphabetical</runOrder>
+                 <reuseForks>false</reuseForks>
+                 <argLine>-enableassertions -Xmx2000m -XX:MaxPermSize=256m -Djava.security.egd=file:/dev/./urandom "-Djava.library.path=${hadoop.library.path}${path.separator}${java.library.path}" -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./target/</argLine>
+                 <redirectTestOutputToFile>${test.output.tofile}</redirectTestOutputToFile>
+                 <testSourceDirectory>${basedir}/src/it/java</testSourceDirectory>
+                 <groups>org.apache.phoenix.end2end.SplitSystemCatalogTests</groups>
+                 <shutdown>kill</shutdown>
+              </configuration>
+              <goals>
+                 <goal>integration-test</goal>
+                 <goal>verify</goal>
+              </goals>
+            </execution>
           </executions>
         </plugin>
         <plugin>
@@ -452,6 +471,9 @@
               <!-- TODO turn back on javadocs - disabled now for testing -->
               <!-- <goal>jar</goal> -->
             </goals>
+            <configuration>
+              <additionalparam>${javadoc.opts}</additionalparam>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -1005,6 +1027,16 @@
   </dependencyManagement>
 
   <profiles>
+    <!-- disable doclint with 1.8+ JDKs-->
+    <profile>
+      <id>java8-doclint-disabled</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+      </properties>
+    </profile>
     <!-- this profile should be activated for release builds -->
     <profile>
       <id>release</id>

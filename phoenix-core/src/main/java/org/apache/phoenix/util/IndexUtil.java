@@ -32,6 +32,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -99,7 +100,10 @@ import org.apache.phoenix.schema.ColumnRef;
 import org.apache.phoenix.schema.KeyValueSchema;
 import org.apache.phoenix.schema.PColumn;
 import org.apache.phoenix.schema.PColumnFamily;
+import org.apache.phoenix.schema.PColumnImpl;
 import org.apache.phoenix.schema.PIndexState;
+import org.apache.phoenix.schema.PName;
+import org.apache.phoenix.schema.PNameFactory;
 import org.apache.phoenix.schema.PTable;
 import org.apache.phoenix.schema.PTable.ImmutableStorageScheme;
 import org.apache.phoenix.schema.PTable.QualifierEncodingScheme;
@@ -138,7 +142,7 @@ public class IndexUtil {
     
     // Since we cannot have nullable fixed length in a row key
     // we need to translate to variable length. The verification that we have a valid index
-    // row key was already done, so here we just need to covert from one built-in type to
+    // row key was already done, so here we just need to convert from one built-in type to
     // another.
     public static PDataType getIndexColumnDataType(boolean isNullable, PDataType dataType) {
         if (dataType == null || !isNullable || !dataType.isFixedWidth()) {
@@ -193,6 +197,17 @@ public class IndexUtil {
         String dataColumnFamilyName = SchemaUtil.isPKColumn(dataColumn) ? null : dataColumn.getFamilyName().getString();
         return getIndexColumnName(dataColumnFamilyName, dataColumn.getName().getString());
     }
+    
+	public static PColumn getIndexPKColumn(int position, PColumn dataColumn) {
+		assert (SchemaUtil.isPKColumn(dataColumn));
+		PName indexColumnName = PNameFactory.newName(getIndexColumnName(null, dataColumn.getName().getString()));
+		PColumn column = new PColumnImpl(indexColumnName, null, dataColumn.getDataType(), dataColumn.getMaxLength(),
+				dataColumn.getScale(), dataColumn.isNullable(), position, dataColumn.getSortOrder(),
+				dataColumn.getArraySize(), null, false, dataColumn.getExpressionStr(), dataColumn.isRowTimestamp(), false,
+				// TODO set the columnQualifierBytes correctly
+				/*columnQualifierBytes*/null, HConstants.LATEST_TIMESTAMP); 
+		return column;
+	}
 
     public static String getLocalIndexColumnFamily(String dataColumnFamilyName) {
         return dataColumnFamilyName == null ? null
@@ -815,6 +830,13 @@ public class IndexUtil {
     				.setMessage("indexState=" + newState).setSchemaName(schemaName)
     				.setTableName(indexName).build().buildException();
     	}
+    }
+
+    public static List<PTable> getClientMaintainedIndexes(PTable table) {
+        Iterator<PTable> indexIterator = // Only maintain tables with immutable rows through this client-side mechanism
+        (table.isImmutableRows() || table.isTransactional()) ? IndexMaintainer.maintainedGlobalIndexes(table
+                .getIndexes().iterator()) : Collections.<PTable> emptyIterator();
+        return Lists.newArrayList(indexIterator);
     }
     
 }
